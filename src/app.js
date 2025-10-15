@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
 import authRoutes from './routes/auth.routes.js';
+import questRoutes from './routes/quest.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5500;
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ limit: '250kb', extended: false }));
 app.use(cors());
 app.use(helmet());
 
+// THIS IS BASE PAGE RNIGGAR
 app.get('/', (req, res) => {
     res.status(200).json({
         status: 'ok',
@@ -30,6 +32,7 @@ app.get('/', (req, res) => {
 
 // ROUTES
 app.use('/auth', authRoutes);
+app.use('/quests', questRoutes);
 
 app.use(errorHandler);
 

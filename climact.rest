@@ -7,8 +7,8 @@ post http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
-    "username": "irfan@test.dev",
-    "password": "123123123"
+  "username": "irfan@test.dev",
+  "password": "123123123"
 }
 
 ###
@@ -16,6 +16,19 @@ post http://localhost:5000/auth/login
 Content-Type: application/json
 
 {
-    "username": "haerunnas@test.dev",
-    "password": "123123123"
+  "username": "haerunnas@test.dev",
+  "password": "123123123"
+}
+
+
+###
+post http://localhost:5000/quests
+Content-Type: application/json
+
+{
+  "name": "Cuci Tangan",
+  "description": "Cuci tangan minimal 20 detik dengan sabun",
+  "points": 10,
+  "category": "daily",
+  "deadline": "2024-07-01T23:59:59"
 }
