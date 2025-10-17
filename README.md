@@ -249,7 +249,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👥 Authors
 
-- [@hearunnas](https://github.com/hrnns-ti)
+- [@haerunnas](https://github.com/hrnns-ti)
 
 ---
 
