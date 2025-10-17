@@ -4,9 +4,12 @@ import session from 'express-session';
 import cors from 'cors';
 import helmet from 'helmet';
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
+import {verifyToken} from "./middlewares/auth.middleware.js";
+
 
 import authRoutes from './routes/auth.routes.js';
 import questRoutes from './routes/quest.routes.js';
+import userQuestRoutes from "./routes/userquest.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5500;
@@ -33,6 +36,7 @@ app.get('/', (req, res) => {
 // ROUTES
 app.use('/auth', authRoutes);
 app.use('/quests', questRoutes);
+app.use('/userquest', verifyToken ,userQuestRoutes);
 
 app.use(errorHandler);
 

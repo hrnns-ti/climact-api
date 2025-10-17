@@ -18,7 +18,9 @@ db.exec(`
         category TEXT NOT NULL CHECK (category IN ('daily', 'weekly')),
         points INTEGER DEFAULT 0,
         created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        deadline TIMESTAMP NOT NULL
+        deadline TIMESTAMP NOT NULL,
+        target INTEGER NOT NULL DEFAULT 1
+                                
     );
 
     CREATE TABLE IF NOT EXISTS user_quests (
@@ -29,10 +31,12 @@ db.exec(`
         completed BOOLEAN NOT NULL DEFAULT 0,
         started TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         finished TIMESTAMP,
+        periode TEXT,
         FOREIGN KEY(user_id) REFERENCES users(id),
         FOREIGN KEY(quest_id) REFERENCES quest(id),
-        UNIQUE (user_id, quest_id)
+        UNIQUE (user_id, quest_id, periode)
     );
+
 `);
 
 export default db;
