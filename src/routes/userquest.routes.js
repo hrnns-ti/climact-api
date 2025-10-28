@@ -4,20 +4,17 @@ import { getISOWeek, getYear } from 'date-fns';
 
 const router = express.Router();
 
-// Helper: validasi periode daily
 function isValidDaily(periode) {
     const today = new Date().toISOString().slice(0, 10);
     return periode === today;
 }
 
-// Helper: validasi periode weekly
 function isValidWeekly(periode) {
     const now = new Date();
     const currentWeek = `${getYear(now)}-W${getISOWeek(now)}`;
     return periode === currentWeek;
 }
 
-// Helper: validasi kepemilikan data user_quests
 function ensureOwnership(req, res, next) {
     const user_id = req.user.id;
     const { id } = req.params;
@@ -32,7 +29,7 @@ function ensureOwnership(req, res, next) {
         return res.status(403).json({ error: 'Forbidden' });
     }
 
-    req.userQuest = userQuest; // simpan untuk handler berikutnya
+    req.userQuest = userQuest;
     next();
 }
 
@@ -40,33 +37,28 @@ router.post('/start', (req, res) => {
     try {
         const user_id = req.user.id;
         let { quest_id, periode } = req.body;
+
         if (!user_id || !quest_id || !periode) {
             return res.status(400).json({ error: 'user_id, quest_id, and periode are required' });
         }
-        // Ambil kategori quest
+
         const questStmt = db.prepare('SELECT category FROM quest WHERE id = ?');
         const quest = questStmt.get(quest_id);
+
         if (!quest) {
             return res.status(404).json({ error: 'Quest definition not found' });
         }
-        // Validasi periode sesuai kategori
-        if (quest.category === 'daily' && !isValidDaily(periode)) {
-            return res.status(400).json({ error: 'Periode daily hanya boleh hari ini.' });
-        }
-        if (quest.category === 'weekly' && !isValidWeekly(periode)) {
-            return res.status(400).json({ error: 'Periode weekly hanya boleh minggu ini.' });
-        }
 
-        // Cek quest sudah dijalankan di periode yang sama
         const check = db.prepare('SELECT * FROM user_quests WHERE user_id = ? AND quest_id = ? AND periode = ?');
         const ada = check.get(user_id, quest_id, periode);
+
         if (ada) {
             return res.status(409).json({ error: 'Quest sudah dijalankan di periode ini' });
         }
 
-        // Insert user quest baru
         const insert = db.prepare('INSERT INTO user_quests (user_id, quest_id, periode) VALUES (?, ?, ?)');
         const hasil = insert.run(user_id, quest_id, periode);
+
         res.status(201).json({
             id: hasil.lastInsertRowid,
             user_id,
@@ -76,6 +68,7 @@ router.post('/start', (req, res) => {
             completed: 0,
             started: new Date().toISOString()
         });
+
     } catch (err) {
         console.error('Error starting quest:', err);
         res.status(500).json({ error: err.message || 'Unknown error' });
@@ -86,14 +79,13 @@ router.patch('/:id/progress', ensureOwnership, (req, res) => {
     try {
         const { id } = req.params;
         const increment = req.body.increment !== undefined ? Number(req.body.increment) : 1;
-        // Validasi increment harus angka positif
+
         if (isNaN(increment) || increment <= 0) {
             return res.status(400).json({ error: 'Increment harus angka positif' });
         }
 
         const userQuest = req.userQuest;
 
-        // Cek apakah quest sudah completed
         if (userQuest.completed) {
             return res.status(400).json({ error: 'Quest sudah complete' });
         }
@@ -105,12 +97,10 @@ router.patch('/:id/progress', ensureOwnership, (req, res) => {
             return res.status(404).json({ error: 'Quest definition not found' });
         }
 
-        // Validasi deadline
         if (quest.deadline && new Date() > new Date(quest.deadline)) {
             return res.status(400).json({ error: 'Quest sudah lewat deadline, tidak bisa progress.' });
         }
 
-        // Validasi periode sesuai kategori
         if (quest.category === 'daily' && !isValidDaily(userQuest.periode)) {
             return res.status(400).json({ error: 'Periode daily hanya boleh hari ini.' });
         }
@@ -119,14 +109,13 @@ router.patch('/:id/progress', ensureOwnership, (req, res) => {
             return res.status(400).json({ error: 'Periode weekly hanya boleh minggu ini.' });
         }
 
-        // Hitung progress baru
         let newProgress = userQuest.progress + increment;
         let completed = 0;
         let finished = null;
         let pointsEarned = 0;
 
         if (newProgress >= quest.target) {
-            newProgress = quest.target; // Cap di target maksimal
+            newProgress = quest.target;
             completed = 1;
             finished = new Date().toISOString();
             pointsEarned = quest.points;
@@ -134,7 +123,7 @@ router.patch('/:id/progress', ensureOwnership, (req, res) => {
             const updateUserPoints = db.prepare('UPDATE users SET points = points + ? WHERE id = ?');
             updateUserPoints.run(quest.points, userQuest.user_id);
 
-            console.log(`✅ User ${userQuest.user_id} completed quest ${userQuest.quest_id}, earned ${quest.points} points`);
+            console.log(`User ${userQuest.user_id} completed quest ${userQuest.quest_id}, earned ${quest.points} points`);
         }
 
         // Update progress di user_quests
@@ -142,7 +131,7 @@ router.patch('/:id/progress', ensureOwnership, (req, res) => {
         updateStmt.run(newProgress, completed, finished, id);
 
         res.json({
-            message: completed ? '🎉 Quest completed! Points awarded!' : 'Progress updated',
+            message: completed ? 'Quest completed! Points awarded!' : 'Progress updated',
             progress: newProgress,
             target: quest.target,
             completed: !!completed,
@@ -175,6 +164,7 @@ router.patch('/:id/complete', ensureOwnership, (req, res) => {
         if (quest.category === 'daily' && !isValidDaily(userQuest.periode)) {
             return res.status(400).json({ error: 'Periode daily hanya boleh hari ini.' });
         }
+
         if (quest.category === 'weekly' && !isValidWeekly(userQuest.periode)) {
             return res.status(400).json({ error: 'Periode weekly hanya boleh minggu ini.' });
         }
@@ -184,7 +174,6 @@ router.patch('/:id/complete', ensureOwnership, (req, res) => {
         const updateUserPoints = db.prepare('UPDATE users SET points = points + ? WHERE id = ?');
         updateUserPoints.run(quest.points, userQuest.user_id);
 
-        // Mark quest as completed
         const updateQuest = db.prepare('UPDATE user_quests SET completed = 1, finished = ? WHERE id = ?');
         const hasil = updateQuest.run(finish, id);
 

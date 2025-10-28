@@ -10,6 +10,7 @@ import {verifyToken} from "./middlewares/auth.middleware.js";
 import authRoutes from './routes/auth.routes.js';
 import questRoutes from './routes/quest.routes.js';
 import userQuestRoutes from "./routes/userquest.routes.js";
+import userRoutes from "./routes/user.routes.js"
 
 const app = express();
 const PORT = process.env.PORT || 5500;
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/quests', questRoutes);
 app.use('/userquest', verifyToken ,userQuestRoutes);
+app.use('/users', verifyToken, userRoutes);
 
 app.use(errorHandler);
 

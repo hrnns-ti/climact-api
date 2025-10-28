@@ -8,7 +8,7 @@ db.exec(`
         username TEXT UNIQUE NOT NULL,
         email TEXT UNIQUE,
         password TEXT,
-        points INTEGER
+        points INTEGER DEFAULT 0
     );
     
     CREATE TABLE IF NOT EXISTS quest (

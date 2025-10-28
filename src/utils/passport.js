@@ -26,3 +26,6 @@ passport.deserializeUser((user, done) => {
 });
 
 export default passport;
+
+
+// YK WHAT? I HATE THIS FITUR :V

@@ -8,16 +8,12 @@ import { authLimiter } from '../utils/limiter.js';
 
 const router = express.Router();
 
-// REGISTER
 router.post('/register', authLimiter, [
     body('username').notEmpty().withMessage('Username wajib diisi brok'),
     body('password').isLength({ min: 8 }).withMessage('Password minimal 8 karakter brok')
 ], async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        // Validasi input gagal
-        return res.status(400).json({ errors: errors.array() });
-    }
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
     const { username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
@@ -29,15 +25,12 @@ router.post('/register', authLimiter, [
         res.json({ token });
     } catch (err) {
         if (err.code === 'SQLITE_CONSTRAINT' || err.message.includes('UNIQUE')) {
-            // Username sudah dipakai
             return res.status(409).json({ error: 'Username sudah digunakan' });
         }
-        // Error lain dilempar ke global error handler
         throw err;
     }
 });
 
-// LOGIN
 router.post('/login', authLimiter, [
     body('username').notEmpty().withMessage('Username wajib diisi brok'),
     body('password').notEmpty().withMessage('Password wajib diisi brok')
@@ -68,6 +61,9 @@ router.post('/login', authLimiter, [
         throw err;
     }
 });
+
+
+
 
 // GOOGLE OAUTH
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));

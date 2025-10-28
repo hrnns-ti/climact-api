@@ -1,6 +1,6 @@
 import rateLimit from 'express-rate-limit';
 
-// Limiter biasa(anggap template)
+// Limiter biasa(template)
 export const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
