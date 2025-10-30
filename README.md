@@ -84,7 +84,8 @@ climact-api/
 │   ├── auth.routes.js        # Authentication endpoints
 │   ├── quest.routes.js       # Quest management endpoints
 │   ├── userquest.routes.js   # User quest progress endpoints
-│   └── user.routes.js        # User profile & points endpoints
+│   ├── user.routes.js        # User profile & points endpoints
+│   └── public.routes.js      # Public endpoints (Leaderboard)
 ├── middlewares/
 │   ├── auth.middleware.js    # JWT verification
 │   └── errorHandler.middleware.js  # Error handling
@@ -138,6 +139,12 @@ For detailed API documentation, see [Documentation](./documentation.md)
 | `GET` | `/userquest` | Get user's active quests | ✅ **Live** |
 | `PATCH` | `/userquest/:id/progress` | Update quest progress | ✅ **Live** |
 | `PATCH` | `/userquest/:id/complete` | Complete quest manually | ✅ **Live** |
+
+#### Public
+
+| Method | Endpoint              | Description     | Status |
+|--------|-----------------------|-----------------|--------|
+| `GET`  | `/public/leaderboard` | Get Leaderboard | ✅ **Live** |
 
 ---
 
@@ -336,7 +343,7 @@ This ensures accurate counting of completed quests and their total progress.
 
 ## 🚧 Roadmap
 
-- [ ] Leaderboard (`GET /users/leaderboard`)
+- [x] Leaderboard (`GET /public/leaderboard`)
 - [ ] Badge and achievement system
 - [ ] Quest statistics and detailed analytics
 - [ ] Notification system
