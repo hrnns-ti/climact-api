@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.routes.js';
 import questRoutes from './routes/quest.routes.js';
 import userQuestRoutes from "./routes/userquest.routes.js";
 import userRoutes from "./routes/user.routes.js"
+import publicRoutes from "./routes/public.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5500;
@@ -36,9 +37,10 @@ app.get('/', (req, res) => {
 
 // ROUTES
 app.use('/auth', authRoutes);
-app.use('/quests', questRoutes);
+app.use('/quests', verifyToken, questRoutes);
 app.use('/userquest', verifyToken ,userQuestRoutes);
 app.use('/users', verifyToken, userRoutes);
+app.use('/public', publicRoutes);
 
 app.use(errorHandler);
 

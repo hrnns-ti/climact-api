@@ -43,7 +43,7 @@ router.get('/me', (req, res) => {
 
 
 
-// DEBUG ENDPOINT - Cek data raw dari database
+
 // router.get('/me/debug', (req, res) => {
 //     try {
 //         const user_id = req.user.id;
