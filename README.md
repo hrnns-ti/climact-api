@@ -2,7 +2,7 @@
 
 **A RESTful API powering the ClimACT gamified climate action platform.**
 
-> Turn climate intentions into measurable actions. Every mission matters. Every point counts.
+> Turn climate intentions into measurable actions.
 
 ---
 
@@ -205,11 +205,11 @@ UNIQUE(user_id, session_date)
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| `POST` | `/api/auth/register` | ❌ | Create new user account |
-| `POST` | `/api/auth/login` | ❌ | User login (username or email) |
+| `POST` | `/api/auth/register` | ✅ | Create new user account |
+| `POST` | `/api/auth/login` | ✅ | User login (username or email) |
 | `GET` | `/api/auth/profile` | ✅ | Get user profile |
-| `POST` | `/api/auth/forgot` | ❌ | Request password reset OTP |
-| `POST` | `/api/auth/reset/new` | ❌ | Reset password with OTP |
+| `POST` | `/api/auth/forgot` | ✅ | Request password reset OTP |
+| `POST` | `/api/auth/reset/new` | ✅ | Reset password with OTP |
 
 ### Users & Points
 
@@ -224,7 +224,7 @@ UNIQUE(user_id, session_date)
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| `GET` | `/api/quests` | ❌ | List all quests |
+| `GET` | `/api/quests` | ✅ | List all quests |
 | `POST` | `/api/userquests/start` | ✅ | Start a quest |
 | `GET` | `/api/userquests` | ✅ | Get user's quests |
 | `PATCH` | `/api/userquests/:id/progress` | ✅ | Update quest progress |
@@ -249,8 +249,8 @@ UNIQUE(user_id, session_date)
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| `GET` | `/api/public/leaderboard` | ❌ | Top users by points |
-| `GET` | `/api/public/badges` | ❌ | List all badges |
+| `GET` | `/api/public/leaderboard` | ✅ | Top users by points |
+| `GET` | `/api/public/badges` | ✅ | List all badges |
 
 ---
 
@@ -449,14 +449,14 @@ Login with new password ✅
 
 Copyright © 2025 hrnns-ti - All Rights Reserved
 
-See LICENSE file for details.
+See [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 👨‍💻 Contributors
 
-- **haerunnas** – Backend Developer, Informatics Engineering
 - **Mrs. Dewi Khaerani M.Sc** – Project Vision & Supervision
+- **haerunnas** – Backend Developer, Informatics Engineering
 
 ---
 
