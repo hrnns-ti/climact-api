@@ -1,0 +1,116 @@
+### BASE
+@baseUrl = http://localhost:5500
+@token = 
+
+### 1. HEALTH CHECK
+GET {{baseUrl}}/health
+
+### 2. AUTH - Register (jalankan sekali)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "tester1",
+  "email": "tester1@example.com",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+
+### 3. AUTH - Login (copy token ke @token di atas)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "tester1@example.com",
+  "password": "password123"
+}
+
+### 4. USERS - Me
+GET {{baseUrl}}/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+### 5. USERS - Summary
+GET {{baseUrl}}/api/users/summary
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+### 6. QUESTS - List all (PUBLIC)
+GET {{baseUrl}}/api/quests
+
+### 7. USERQUESTS - Start quest (ganti quest_id dari response #6)
+POST {{baseUrl}}/api/userquests/start
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+{
+  "quest_id": 1,
+  "periode": "2025-11-29"
+}
+
+### 8. USERQUESTS - Update progress (ganti ID dari response #7)
+PATCH {{baseUrl}}/api/userquests/2/progress
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+{
+  "increment": 1
+}
+
+### 9. USERQUESTS - List my quests
+GET {{baseUrl}}/api/userquests
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+### 10. USERS - Increment counter
+POST {{baseUrl}}/api/users/trash_recycled/inc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+{
+  "amount": 1
+}
+
+### 11. QUIZZES - Daily quiz
+GET {{baseUrl}}/api/quizzes/daily
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+### 12. QUIZZES - Submit (isi question_id & choice_id dari #11)
+POST {{baseUrl}}/api/quizzes/daily/submit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+{
+  "answers": [
+    { "question_id": 1, "selected_choice_id": 1 },
+    { "question_id": 2, "selected_choice_id": 5 },
+    { "question_id": 3, "selected_choice_id": 9 },
+    { "question_id": 4, "selected_choice_id": 13 },
+    { "question_id": 5, "selected_choice_id": 17 }
+  ]
+}
+
+### 14. ARTICLES - Create (sudah tested)
+POST {{baseUrl}}/api/articles
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+{
+  "title": "5 Kebiasaan Kecil untuk Mengurangi Jejak Karbon",
+  "content": "Mulai dari membawa tumblr, matikan listrik, pakai transportasi umum."
+}
+
+### 15. ARTICLES - Publish (ganti ID dari #14)
+PATCH {{baseUrl}}/api/articles/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJub3RjaCIsImlhdCI6MTc2NDQyNDczNCwiZXhwIjoxNzY0NTExMTM0fQ.q51pwU2SNZQY1u6FedZn0oV7DyGGZ_5iCmYyXEOCV8I
+
+{
+  "status": "published"
+}
+
+### 16. ARTICLES - List published (PUBLIC)
+GET {{baseUrl}}/api/articles
+
+### 17. PUBLIC - Leaderboard
+GET {{baseUrl}}/api/public/leaderboard?limit=10&page=1
+
+### 18. PUBLIC - Badges
+GET {{baseUrl}}/api/public/badges
