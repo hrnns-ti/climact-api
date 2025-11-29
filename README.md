@@ -455,7 +455,7 @@ See [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Contributors
 
-- **haerunnas** – Backend Developer, Informatics Engineering
+- **Haerunnas** – Backend Developer, Informatics Engineering
 
 ---
 
