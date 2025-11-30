@@ -44,7 +44,7 @@ app.use('/api', apiLimiter);
 app.get('/health', async (req, res) => {
     try {
         await db.query('SELECT 1');
-        res.json({
+        res.status(200).json({
             status: 'ok',
             timestamp: new Date().toISOString(),
             env: process.env.NODE_ENV,
@@ -129,7 +129,16 @@ app.use(errorHandler);
 
 // =============== START SERVER ===================
 const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => {
-    console.log(`🚀 Climact API running on port ${PORT}`);
-    console.log(`📱 Health check available at http://localhost:${PORT}/health`);
-});
+
+async function startServer() {
+    try {
+        await db.runMigrations();
+        app.listen(PORT, () => {
+            console.log(`🚀 Climact API running on port ${PORT}`);
+            console.log(`📱 Health check available at http://localhost:${PORT}/health`);
+        });
+    } catch (err) {
+        console.error('Fucked up to start server', err);
+        process.exit(1);
+    }
+}
